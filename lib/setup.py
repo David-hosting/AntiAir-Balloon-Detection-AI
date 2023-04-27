@@ -1,5 +1,8 @@
+import cv2
+import threading
 import tkinter as tk
 import customtkinter as ctk
+import PIL.Image, PIL.ImageTk
 from typing import Optional
 from lib.exceptions import ButtonAlreadyExists
 
@@ -39,6 +42,25 @@ class Window:
             "btns": {}
         }
 
+        # Open the video camera
+        self.capture = cv2.VideoCapture(0)
+        self.cam_frame = ctk.CTkFrame(self.window)
+        self.cam_frame.pack(side=ctk.LEFT, anchor = ctk.CENTER)
+        self.cam_frame.lift()
+        # Create a canvas that can fit the above video source size
+        self.canvas = tk.Canvas(self.cam_frame, width = 640, height = 480)
+        self.canvas.pack()  
+
+        # After it is called once, the update method will be automatically called every delay milliseconds
+        self.delay = 15
+        self.zoom = 1
+        self.update()
+
+    def get_zoom(self) -> int:
+        return self.zoom
+    
+    def set_zoom(self, level):
+        self.zoom = level
 
     def constract(self, title : str) -> None:
         """
@@ -65,7 +87,9 @@ class Window:
         font : Optional[list[str, int, str]] = ['Arial', 28, 'bold']
             The style of the text. 
         """
-        T = ctk.CTkLabel(self.window, text=text, font=ctk.CTkFont(family=f'<{font[0]}>', size=font[1], weight=font[2]))
+        frame = ctk.CTkFrame(self.window)
+        frame.place(relx=0.5, rely=0, anchor=tk.N)
+        T = ctk.CTkLabel(frame, text=text, font=ctk.CTkFont(family=f'<{font[0]}>', size=font[1], weight=font[2]))
         T.pack()
         self.data["Title"] = text
 
@@ -193,5 +217,14 @@ class Window:
     def return_to_main(self):
         raise NotImplementedError("function is not ready to use yet")
     
-    def init_camera(self, camera, ) -> None:
-        frame = ctk.CTkFrame(master=self.window)
+    def update(self):
+        # Get a frame from the video source
+        ret, frame = self.capture.read()
+        
+        if ret:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame = cv2.resize(frame, None, fx=self.zoom, fy=self.zoom, interpolation=cv2.INTER_LINEAR)
+            self.photo = PIL.ImageTk.PhotoImage(image = PIL.Image.fromarray(frame))
+            self.canvas.create_image(0, 0, image = self.photo, anchor = tk.NW)
+ 
+        self.window.after(self.delay, self.update)

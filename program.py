@@ -77,13 +77,15 @@ def zoom_in(window : ctk.CTk, text_widget : ctk.CTkTextbox) -> None:
     """
     #Add command for zoom in
     window.handle_logger_status(text_widget, 'normal')
-    global ZOOM_LEVEL
-    if ZOOM_LEVEL > 2:
-        text_widget.insert(ctk.END, f"Cannot zoom over level {ZOOM_LEVEL}\n")
-        return
-    ZOOM_LEVEL += 1
+    zoom_level = main_window.get_zoom()
 
-    text_widget.insert(ctk.END, f"Zoomed In, level {ZOOM_LEVEL}\n")
+    if zoom_level > 2:
+        text_widget.insert(ctk.END, f"Cannot zoom over level {zoom_level}\n")
+        return
+    main_window.set_zoom(zoom_level + 1)
+    main_window.window.after(0, main_window.update, zoom_level + 1)
+
+    text_widget.insert(ctk.END, f"Zoomed In, level {zoom_level + 1}\n")
     window.handle_logger_status(text_widget, 'disabled')
 
 def zoom_out(window : ctk.CTk, text_widget : ctk.CTkTextbox) -> None: 
@@ -99,15 +101,16 @@ def zoom_out(window : ctk.CTk, text_widget : ctk.CTkTextbox) -> None:
     """
     #Add command for zoom out
 
-    global ZOOM_LEVEL
-    if ZOOM_LEVEL <= 0:
-        text_widget.insert(ctk.END, f"Cannot zoom out less than level {ZOOM_LEVEL}\n")
+    zoom_level = main_window.get_zoom()
+    if zoom_level <= 1:
+        text_widget.insert(ctk.END, f"Cannot zoom out less than level {zoom_level}\n")
         return 
-    ZOOM_LEVEL -= 1
+    main_window.set_zoom(zoom_level - 1)
     
     window.handle_logger_status(text_widget, 'normal')
-    text_widget.insert(ctk.END, f"Zoomed Out, level {ZOOM_LEVEL}\n")
+    text_widget.insert(ctk.END, f"Zoomed Out, level {zoom_level - 1}\n")
     window.handle_logger_status(text_widget, 'disabled')
+    main_window.window.after(0, main_window.update, zoom_level - 1)
 
 def handle_bind(window : ctk.CTk, key : tk.Event, text_widget: ctk.CTkTextbox):
     global IS_PRESSED, FLAG, ID, STATUS
@@ -171,7 +174,7 @@ if __name__ == '__main__':
     IS_PRESSED = False
     FLAG = None
     ID = None
-    ZOOM_LEVEL = 0
+    #ZOOM_LEVEL = 0
 
     settings_icon = ctk.CTkImage(dark_image=Image.open(os.path.join('assets', 'settings.png')),
                                 light_image=Image.open(os.path.join('assets', 'settings.png')),
@@ -191,8 +194,6 @@ if __name__ == '__main__':
     main_window.add_btn('Automatic', 100, 50, possition = (0.58, 0.95, ctk.CENTER), event=lambda: set_type(main_window, l, 'automatic'))
     main_window.add_btn(None, 50, 50, possition=(0.01, 0.95, ctk.W), image=settings_icon, event= lambda: main_window.config_settings_window)
 
-    main_window.init_camera(None)
-
     l = main_window.logger(state="normal") # normal
     l.insert(ctk.END, 'Program initiated at : {}\n'.format(datetime.now().strftime("%d/%m/%Y %H:%M:%S")))
     main_window.handle_logger_status(l, 'disabled')
@@ -201,5 +202,6 @@ if __name__ == '__main__':
     main_window.window.bind("<KeyPress>", lambda event: handle_bind(main_window, event, l))
     main_window.window.bind("<KeyRelease>", lambda event: handle_release())
 
+    #main_window.video_capture()
     main_window.window.mainloop()
 
