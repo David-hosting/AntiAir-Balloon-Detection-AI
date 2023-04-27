@@ -25,8 +25,3 @@ These components work in this order:
 2. The distance in pixels between the middle point of the of the screen to the middle point of the bbox is being calulated. 
 3. The distance is being compared to the constant ratio: the horizontal distance in meters from the camera to the middle of the ballom / the distance in pixels between the middle point of the of the screen to the middle point of the bbox. This gives how much the motor has to move to put the X point of the middle screen middle on the X point of the bbox.
 4. The Lazer is being activated until the balloon 'pops'.<br>
-
-There are three ways(mods) to work with this project. These mods are: `Manual, Semi-Auto, Automatic`.<br>
-- In `Manual` mode, the user controols everything - from the movemnt of the motor to the actuall shooting
-- In `Semi-Auto` mode, the machine learning model will lead the motor and zoom enoght for a good detection but the user will give the athoriztion for the activation of the laser.
-- In `Automaic` mode, the machine learning controlls everything, from moving and zooming up to the shooting. In this mode the user cannot control anything and in order for him to gain control back, he must change the mode to one of the other modes. 
