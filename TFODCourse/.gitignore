@@ -1,5 +1,10 @@
-/tfod
-/Tensorflow
-/.ipynb_checkpoints
-/ipynb_checkpoints
-.ipynb_checkpoints
+\tfod
+\.ipynb_checkpoints
+\.git
+\.0.6.0
+\1.3.9
+\Error Guide.md
+\README.md
+\TensorFlow\labelimg
+\TensorFlow\models
+\TensorFlow\wrokspace\images\
