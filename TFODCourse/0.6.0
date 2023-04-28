@@ -1,0 +1,6 @@
+Collecting tensorflow-hub
+  Using cached tensorflow_hub-0.13.0-py2.py3-none-any.whl (100 kB)
+Requirement already satisfied: numpy>=1.12.0 in c:\users\user\desktop\local\tfodcourse\tfod\lib\site-packages (from tensorflow-hub) (1.21.6)
+Requirement already satisfied: protobuf>=3.19.6 in c:\users\user\desktop\local\tfodcourse\tfod\lib\site-packages (from tensorflow-hub) (3.19.6)
+Installing collected packages: tensorflow-hub
+Successfully installed tensorflow-hub-0.13.0
