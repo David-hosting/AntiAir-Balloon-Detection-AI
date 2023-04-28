@@ -1,10 +1,6 @@
 AntiAir Balloon Detection AI
 ============================
 
-Why this Exists?
-----------------
-This project is the product of my senior year of electronics major. I chose this project because of it's complexity, I enjoyed taking this project as something that I could learn from and experiance how it is to start something from zero with only the mentors the the internet to help me. 
-
 About This Project
 ------------------
 This project is a prototype of a system that can detect and shoot down incendiary balloons that are sent to harm people and destory property. In Israel the issue of incendiary balloons became a coomon thing. In order to combat the situation, the `IDF` created a complex system that relays on a lot of sensors and calculations, this project aims to make the same system but only to use less complex stuff in order to achive the same goal. This project relays on a simple machine learning model that knows how to detects ballons and with a basic mathemaic algorithem to get to the balloon and shoot it down. I believe that this project can be a gamechanger in the air-protection field. 
@@ -25,3 +21,7 @@ These components work in this order:
 2. The distance in pixels between the middle point of the of the screen to the middle point of the bbox is being calulated. 
 3. The distance is being compared to the constant ratio: the horizontal distance in meters from the camera to the middle of the ballom / the distance in pixels between the middle point of the of the screen to the middle point of the bbox. This gives how much the motor has to move to put the X point of the middle screen middle on the X point of the bbox.
 4. The Lazer is being activated until the balloon 'pops'.<br>
+
+Reflection
+----------
+This project is the product of my senior year of electronics major. I chose this project because of it's complexity, I enjoyed taking this project as something that I could learn from and experiance how it is to start something from zero with only the mentors the the internet to help me. 
