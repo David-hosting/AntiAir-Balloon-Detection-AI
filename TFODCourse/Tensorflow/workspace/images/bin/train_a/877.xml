@@ -1,0 +1,26 @@
+<annotation>
+	<folder>Balloon</folder>
+	<filename>877.jpeg</filename>
+	<path>C:\Users\User\Desktop\Electronics Project\Project's DL\ML\TFODCourse\Tensorflow\workspace\images\collectedimages\Balloon\877.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>194</width>
+		<height>259</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>Balloon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>61</xmin>
+			<ymin>81</ymin>
+			<xmax>89</xmax>
+			<ymax>108</ymax>
+		</bndbox>
+	</object>
+</annotation>
