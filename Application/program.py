@@ -1,9 +1,44 @@
-from PIL import Image
-from datetime import datetime
-from lib.setup import Window
 import os
 import tkinter as tk
 import customtkinter as ctk
+from PIL import Image
+from datetime import datetime
+from lib.setup import Window
+#from lib.bluetooth_commands_for_pico import CMD
+import time 
+import serial
+import threading
+
+def flush_buffer() -> None:
+    SERIAL.flushInput() # Empty input buffer
+    SERIAL.flushOutput() # Empty output buffer
+
+def move_motor_left() -> None:
+    flush_buffer()
+    #SERIAL.write(b'M.DC.L.')
+    SERIAL.write(b'2')
+    #time.sleep(100)
+    flush_buffer()
+
+def move_motor_right() -> None:
+    flush_buffer()
+    #SERIAL.write(b'M.DC.R.')
+    SERIAL.write(b'3')
+    #time.sleep(100)
+    flush_buffer()
+
+def stop_motor() -> None:
+    flush_buffer()
+    SERIAL.write(b'S.M.')
+    # time.sleep(100)
+    flush_buffer()
+
+def turn_laser() -> None:
+    flush_buffer()
+    #SERIAL.write(b'T.L.')
+    SERIAL.write(b'5')
+    # time.sleep(100)
+    flush_buffer()
 
 def scroll_to_bottom(text_widget : ctk.CTkTextbox) -> None:
     """
@@ -62,7 +97,9 @@ def shoot(window : ctk.CTk, text_widget : ctk.CTkTextbox) -> None:
 
     window.handle_logger_status(text_widget, 'disabled')
     scroll_to_bottom(l)
-    #CMD.toggle_laser()
+    laser_thread = threading.Thread(target=turn_laser, daemon=True)
+    laser_thread.start()
+    laser_thread.join()
 
 def zoom_in(window : ctk.CTk, text_widget : ctk.CTkTextbox) -> None:
     """
@@ -130,6 +167,9 @@ def handle_bind(window : ctk.CTk, key : tk.Event, text_widget: ctk.CTkTextbox):
                 text_widget.insert(ctk.END, "Moving Left - Counter-Clockwise\n")
                 def move_left():
                     print(1)
+                    move_left_thread = threading.Thread(target=move_motor_left, daemon=True)
+                    move_left_thread.start()
+                    move_left_thread.join()
                     if FLAG == 'left':
                         # Schedule the next movement
                         global ID
@@ -146,6 +186,9 @@ def handle_bind(window : ctk.CTk, key : tk.Event, text_widget: ctk.CTkTextbox):
                 # Start moving right
                 def move_right():
                     print(2)
+                    move_right_thread = threading.Thread(target=move_motor_right, daemon=True)
+                    move_right_thread.start()
+                    move_right_thread.join()
                     if FLAG == 'right':
                         # Schedule the next movement
                         global ID
@@ -174,10 +217,11 @@ if __name__ == '__main__':
     IS_PRESSED = False
     FLAG = None
     ID = None
+    SERIAL = serial.Serial("COM4", 9600, timeout = 0.5)
     #ZOOM_LEVEL = 0
 
-    settings_icon = ctk.CTkImage(dark_image=Image.open(os.path.join('assets', 'settings.png')),
-                                light_image=Image.open(os.path.join('assets', 'settings.png')),
+    settings_icon = ctk.CTkImage(dark_image=Image.open(os.path.join('Application', 'assets', 'settings.png')),
+                                light_image=Image.open(os.path.join('Application', 'assets', 'settings.png')),
                                 size=(30,30))
 
     root = ctk.CTk()

@@ -1,5 +1,6 @@
 import cv2
 import tkinter as tk
+import threading
 import customtkinter as ctk
 import PIL.Image, PIL.ImageTk
 from typing import Optional
@@ -53,7 +54,10 @@ class Window:
         # After it is called once, the update method will be automatically called every delay milliseconds
         self.delay = 15
         self.zoom = 1
-        self.update()
+        #self.update()
+        t = threading.Thread(target=self.update(), daemon=True)
+        t.start()
+        t.join()
 
     def get_zoom(self) -> int:
         return self.zoom
