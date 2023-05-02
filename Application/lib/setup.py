@@ -43,7 +43,7 @@ class Window:
         }
 
         # Open the video camera
-        self.capture = cv2.VideoCapture(0)
+        self.capture = cv2.VideoCapture(1)
         self.cam_frame = ctk.CTkFrame(self.window)
         self.cam_frame.pack(side=ctk.LEFT, anchor = ctk.CENTER)
         self.cam_frame.lift()

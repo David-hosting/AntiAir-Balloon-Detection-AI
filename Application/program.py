@@ -4,41 +4,21 @@ import customtkinter as ctk
 from PIL import Image
 from datetime import datetime
 from lib.setup import Window
-#from lib.bluetooth_commands_for_pico import CMD
 import time 
 import serial
 import threading
 
-def flush_buffer() -> None:
-    SERIAL.flushInput() # Empty input buffer
-    SERIAL.flushOutput() # Empty output buffer
-
 def move_motor_left() -> None:
-    flush_buffer()
-    #SERIAL.write(b'M.DC.L.')
+    """Send a serial command to the HC-06 module."""
     SERIAL.write(b'2')
-    #time.sleep(100)
-    flush_buffer()
 
 def move_motor_right() -> None:
-    flush_buffer()
-    #SERIAL.write(b'M.DC.R.')
+    """Send a serial command to the HC-06 module."""
     SERIAL.write(b'3')
-    #time.sleep(100)
-    flush_buffer()
-
-def stop_motor() -> None:
-    flush_buffer()
-    SERIAL.write(b'S.M.')
-    # time.sleep(100)
-    flush_buffer()
 
 def turn_laser() -> None:
-    flush_buffer()
-    #SERIAL.write(b'T.L.')
+    """Send a serial command to the HC-06 module."""
     SERIAL.write(b'5')
-    # time.sleep(100)
-    flush_buffer()
 
 def scroll_to_bottom(text_widget : ctk.CTkTextbox) -> None:
     """
@@ -52,7 +32,6 @@ def scroll_to_bottom(text_widget : ctk.CTkTextbox) -> None:
     text_widget.see(tk.END)
 
 def set_type(window : object, text_widget : ctk.CTkTextbox, new_status : str = None) -> None:
-    global STATUS
     """
     Sets the type of the type of the application - manual, semi-ato automatic.
 
@@ -65,6 +44,7 @@ def set_type(window : object, text_widget : ctk.CTkTextbox, new_status : str = N
     new_status : str
         The new status for the application.
     """
+    global STATUS
     window.handle_logger_status(text_widget, 'normal')
     if not STATUS == new_status:
         STATUS = new_status
@@ -149,7 +129,19 @@ def zoom_out(window : ctk.CTk, text_widget : ctk.CTkTextbox) -> None:
     window.handle_logger_status(text_widget, 'disabled')
     main_window.window.after(0, main_window.update, zoom_level - 1)
 
-def handle_bind(window : ctk.CTk, key : tk.Event, text_widget: ctk.CTkTextbox):
+def handle_bind(window : ctk.CTk, key : tk.Event, text_widget: ctk.CTkTextbox) -> None:
+    """
+    This fucnntion processes the data from the key binds. Handles only key presses.
+
+    Parameters
+    ----------
+    window : tkinter.Tk
+        The window we are working on.
+    key : tk.Event
+        the data collected from the key bind
+    text_widget : ctk.CTkTextbox
+        The entire logger object.
+    """
     global IS_PRESSED, FLAG, ID, STATUS
     window.handle_logger_status(text_widget, 'normal')
     if STATUS == 'manual':
@@ -166,7 +158,6 @@ def handle_bind(window : ctk.CTk, key : tk.Event, text_widget: ctk.CTkTextbox):
                 FLAG = 'left'
                 text_widget.insert(ctk.END, "Moving Left - Counter-Clockwise\n")
                 def move_left():
-                    print(1)
                     move_left_thread = threading.Thread(target=move_motor_left, daemon=True)
                     move_left_thread.start()
                     move_left_thread.join()
@@ -185,7 +176,6 @@ def handle_bind(window : ctk.CTk, key : tk.Event, text_widget: ctk.CTkTextbox):
                 text_widget.insert(ctk.END, "Moving Right - Clockwise\n")
                 # Start moving right
                 def move_right():
-                    print(2)
                     move_right_thread = threading.Thread(target=move_motor_right, daemon=True)
                     move_right_thread.start()
                     move_right_thread.join()
@@ -203,7 +193,6 @@ def handle_bind(window : ctk.CTk, key : tk.Event, text_widget: ctk.CTkTextbox):
 
     scroll_to_bottom(l)
     window.handle_logger_status(text_widget, 'disabled')
-
 
 def handle_release() -> None:
     """Handles the release of a key."""
