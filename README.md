@@ -25,3 +25,9 @@ These components work in this order:
 Reflection
 ----------
 This project is the product of my senior year of electronics major. I chose this project because of it's complexity, I enjoyed taking this project as something that I could learn from and experiance how it is to start something from zero with only the mentors the the internet to help me. 
+
+Upcoming Updates
+----------------
+* (Application) A dot that will represent the laser location on the screen.
+* (Application) Adding the `TensorFlow` Model to the Camera in order to detect Balloons.
+* (Application) Update for the `Automatic` and `semo-auto` modes that will make them work with the machine learning model.
