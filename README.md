@@ -15,7 +15,7 @@ Currently, Apr 27th 2023, The project has:
 * HC-06 bluetooth module
 * L293D chip<br>
 Rectangular diagram: 
-![תרשים מלבני](https://user-images.githubusercontent.com/67858186/234962568-d8af8023-f385-4ece-a5ec-46a85fda4275.png)
+![תרשים מלבני](https://github.com/David-hosting/AntiAir-Balloon-Detection-AI/blob/main/%D7%A1%D7%A4%D7%A8%20%D7%A4%D7%A8%D7%95%D7%99%D7%A7%D7%98/%D7%AA%D7%A8%D7%A9%D7%99%D7%9E%D7%99%D7%9D/%D7%AA%D7%A8%D7%A9%D7%99%D7%9D%20%D7%9E%D7%9C%D7%91%D7%A0%D7%99.png?raw=true)
 These components work in this order: 
 1. The host's computer camera detects a balloon on the screen.
 2. The distance in pixels between the middle point of the of the screen to the middle point of the bbox is being calulated. 
