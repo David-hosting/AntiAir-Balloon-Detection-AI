@@ -68,53 +68,44 @@ matplotlib.use('TkAgg')
 
 category_index = label_map_util.create_category_index_from_labelmap(files['LABELMAP'])
 
-IMAGE_PATH = os.path.join(paths['IMAGE_PATH'], 'test', '219.png')
-
 tf.config.run_functions_eagerly(True)
 
-# Load the image and convert to numpy array
-img = cv2.imread(IMAGE_PATH)
-image_np = np.array(img)
+cap = cv2.VideoCapture(1)
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-# Run object detection on the image
-input_tensor = tf.convert_to_tensor(np.expand_dims(image_np, 0), dtype=tf.float32)
-detections = detect_fn(input_tensor)
+while cap.isOpened(): 
+    ret, frame = cap.read()
+    image_np = np.array(frame)
+    
+    input_tensor = tf.convert_to_tensor(np.expand_dims(image_np, 0), dtype=tf.float32)
+    detections = detect_fn(input_tensor)
+    
+    num_detections = int(detections.pop('num_detections'))
+    detections = {key: value[0, :num_detections].numpy()
+                  for key, value in detections.items()}
+    detections['num_detections'] = num_detections
 
-# Process the detection results
-num_detections = int(detections.pop('num_detections'))
-detections = {key: value[0, :num_detections].numpy()
-              for key, value in detections.items()}
-detections['num_detections'] = num_detections
-detections['detection_classes'] = detections['detection_classes'].astype(np.int64)
+    # detection_classes should be ints.
+    detections['detection_classes'] = detections['detection_classes'].astype(np.int64)
 
-# Add labels to the detected objects
-# Needs to be changed manually
-label_map_path = 'C:\\Users\\User\\Documents\\GitHub\\AntiAir-Balloon-Detection-AI\\TFODCourse\\models\\research\\object_detection\\data\\mscoco_label_map.pbtxt'
-label_map = label_map_util.load_labelmap(label_map_path)
-categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=90, use_display_name=True)
-category_index = label_map_util.create_category_index(categories)
+    label_id_offset = 1
+    image_np_with_detections = image_np.copy()
 
-# Visualize the detected objects on the image
-viz_utils.visualize_boxes_and_labels_on_image_array(
-            image_np,
-            detections['detection_boxes'],
-            detections['detection_classes']+1,
-            detections['detection_scores'],
-            category_index,
-            use_normalized_coordinates=True,
-            max_boxes_to_draw=1,
-            min_score_thresh=.1,
-            agnostic_mode=True)
+    viz_utils.visualize_boxes_and_labels_on_image_array(
+                image_np_with_detections,
+                detections['detection_boxes'],
+                detections['detection_classes']+label_id_offset,
+                detections['detection_scores'],
+                category_index,
+                use_normalized_coordinates=True,
+                max_boxes_to_draw=5,
+                min_score_thresh=.75,
+                agnostic_mode=False)
 
-# Show the image with the detected objects
-plt.imshow(cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB))
-plt.show()
-
-# Print the coordinates of the first detected object
-bbox = detections['detection_boxes'][0]
-height, width, _ = image_np.shape
-xmin, xmax, ymin, ymax = bbox
-xmin = xmin * width; xmax = xmax * width
-ymin = ymin * height; ymax = ymax * height
-bbox = (xmin, ymax, xmax, ymin)
-print('Bbox coordinates:', bbox)
+    cv2.imshow('object detection',  cv2.resize(image_np_with_detections, (800, 600)))
+    
+    if cv2.waitKey(66) & 0xFF == ord('q'):
+        cap.release()
+        cv2.destroyAllWindows()
+        break
