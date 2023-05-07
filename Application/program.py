@@ -15,7 +15,7 @@ def move_motor_left() -> None:
 def move_motor_right() -> None:
     """Send a serial command to the HC-06 module."""
     SERIAL.write(b'3')
-
+    
 def turn_laser() -> None:
     """Send a serial command to the HC-06 module."""
     SERIAL.write(b'5')
