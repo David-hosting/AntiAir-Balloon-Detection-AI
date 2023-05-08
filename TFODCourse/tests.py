@@ -14,9 +14,6 @@ from object_detection.utils import visualization_utils as viz_utils
 from object_detection.utils import label_map_util, visualization_utils as viz_utils
 
 CUSTOM_MODEL_NAME = 'my_ssd_mobnet' 
-PRETRAINED_MODEL_NAME = 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'
-PRETRAINED_MODEL_URL = 'http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8.tar.gz'
-TF_RECORD_SCRIPT_NAME = 'generate_tfrecord.py'
 LABEL_MAP_NAME = 'label_map.pbtxt'
 
 paths = {
