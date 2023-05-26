@@ -29,5 +29,5 @@ This project is the product of my senior year of electronics major. I chose this
 Upcoming Updates
 ----------------
 * (Application) A dot that will represent the laser location on the screen.
-* (Application) Adding the `TensorFlow` Model to the Camera in order to detect Balloons.
+* (Application) Adding the `TensorFlow` Model to the Camera in order to detect Balloons. [DONE]
 * (Application) Update for the `Automatic` and `semo-auto` modes that will make them work with the machine learning model.
