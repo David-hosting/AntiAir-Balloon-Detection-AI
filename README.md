@@ -1,3 +1,7 @@
+NOTE
+====
+**Some of the project files are missing due to storage issues. To inspect the project itself you are welcome to check the project book at: **
+
 AntiAir Balloon Detection AI
 ============================
 
